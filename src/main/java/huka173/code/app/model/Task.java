@@ -1,0 +1,53 @@
+package huka173.code.app.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "tasks")
+@EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
+public class Task implements BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 1)
+    private String name;
+
+    private Long index;
+
+    private String description;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "task_status_id")
+    private TaskStatus taskStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskLabel> taskLabels = new ArrayList<>();
+
+    @CreatedDate
+    private LocalDate createdAt;
+
+    @LastModifiedDate
+    private LocalDate updatedAt;
+}
