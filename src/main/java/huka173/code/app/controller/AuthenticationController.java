@@ -20,9 +20,6 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping(path = "/login")
     public String login(@RequestBody AuthRequest authRequest) {
         var authentication = new UsernamePasswordAuthenticationToken(
@@ -33,19 +30,4 @@ public class AuthenticationController {
         var token = jwtUtils.generateToken(authRequest.getUsername());
         return token;
     }
-
-//    @PostMapping(path = "/register")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public String register(@Valid @RequestBody UserCreateDTO dto) {
-//        var user = userService.create(dto);
-//        var authentication = new UsernamePasswordAuthenticationToken(
-//                dto.getEmail(),
-//                dto.getPassword());
-//
-//        authenticationManager.authenticate(authentication);
-//
-//        var token = jwtUtils.generateToken(user.getEmail());
-//
-//        return token;
-//    }
 }

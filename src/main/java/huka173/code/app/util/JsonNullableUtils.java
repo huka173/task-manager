@@ -1,5 +1,6 @@
 package huka173.code.app.util;
 
+import org.apache.coyote.BadRequestException;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.function.Consumer;

@@ -3,7 +3,6 @@ package huka173.code.app.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,42 +10,30 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "comments")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class Task implements BaseEntity {
+public class Comment implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @NotBlank
-    @Size(min = 1)
-    private String name;
-
-    private Long index;
-
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task taskComment;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "task_status_id")
-    private TaskStatus taskStatus;
+    @JoinColumn(name = "user_id")
+    private User userComment;
 
-    @ManyToOne
-    @JoinColumn(name = "assignee_id")
-    private User assignee;
-
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskLabel> taskLabels = new ArrayList<>();
-
-    @OneToMany(mappedBy = "taskComment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    @NotNull
+    @NotBlank
+    private String commentText;
 
     @CreatedDate
     private LocalDate createdAt;
